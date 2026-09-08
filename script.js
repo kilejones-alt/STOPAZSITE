@@ -97,13 +97,40 @@
   d.querySelectorAll('main img').forEach(img=>{img.classList.add('image-loading');const done=()=>{img.classList.remove('image-loading');img.classList.add('image-ready')};if(img.complete&&img.naturalWidth)done();else img.addEventListener('load',done,{once:true});img.addEventListener('error',()=>{img.classList.remove('image-loading');img.classList.add('image-error')},{once:true})});
 
   const video=d.querySelector('.hero-stalin-video,.site-bg-video video');
-  if(video){if(saveData||reduce){video.autoplay=false;video.pause();video.removeAttribute('autoplay')}else if('IntersectionObserver'in window){const vio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){video.play().catch(()=>{})}else video.pause()}),{threshold:.02});vio.observe(video)}}
+  if(video){
+    const mobileVideo=matchMedia('(max-width:700px)').matches;
+    const wanted=mobileVideo?'stalin-hero-loop-mobile.mp4':'stalin-hero-loop.mp4';
+    if(video.classList.contains('hero-stalin-video') && !video.getAttribute('src')?.endsWith(wanted)){video.src=wanted;video.load()}
+    video.muted=true; video.defaultMuted=true; video.loop=true; video.autoplay=true; video.playsInline=true;
+    let playFallback=null;
+    const removeFallback=()=>{if(playFallback){playFallback.remove();playFallback=null}};
+    const showFallback=()=>{if(playFallback||!video.closest('.hero-stalin-panel'))return;playFallback=d.createElement('button');playFallback.type='button';playFallback.className='hero-video-fallback';playFallback.textContent='';playFallback.setAttribute('aria-label','Play homepage historical motion');playFallback.addEventListener('click',()=>{video.muted=true;video.play().then(removeFallback).catch(()=>{})});video.closest('.hero-stalin-panel').appendChild(playFallback)};
+    const tryPlay=()=>{if(!d.hidden)video.play().then(removeFallback).catch(()=>{})};
+    tryPlay(); requestAnimationFrame(tryPlay); setTimeout(tryPlay,180); setTimeout(tryPlay,700); setTimeout(()=>{if(video.paused||video.readyState<2)showFallback()},1400);
+    video.addEventListener('playing',removeFallback,{passive:true});
+    video.addEventListener('loadeddata',tryPlay,{passive:true});
+    video.addEventListener('canplay',tryPlay,{passive:true});
+    addEventListener('pageshow',tryPlay,{passive:true});
+    d.addEventListener('visibilitychange',()=>{if(d.hidden)video.pause();else tryPlay()});
+  }
 
-  // Giving Kitchen-style impact: spinner + odometer count settles into the large verified metrics.
+  // Giving Kitchen-style impact: replay whenever the section leaves view and is entered again.
   const impact=d.querySelector('.impact-band');
   const format=(n)=>Math.round(n).toLocaleString('en-US');
-  const settleStat=(el,instant=false)=>{const target=Number(el.dataset.count||0),suffix=el.dataset.suffix||'';if(instant||reduce){el.textContent=format(target)+suffix;return}el.classList.add('is-spinning');const start=performance.now(),dur=target>=1000?2200:1650;const tick=t=>{const p=Math.min(1,(t-start)/dur),ease=1-Math.pow(1-p,4),v=target*ease;el.textContent=format(v)+suffix;if(p<1)requestAnimationFrame(tick);else{el.textContent=format(target)+suffix;el.classList.remove('is-spinning');el.classList.add('is-settled')}};requestAnimationFrame(tick)};
-  if(impact){const counters=[...impact.querySelectorAll('[data-count]')]; if(reduce)counters.forEach(e=>settleStat(e,true)); else {const iio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!impact.classList.contains('impact-played')){impact.classList.add('impact-played');counters.forEach((c,i)=>setTimeout(()=>settleStat(c),i*260));iio.disconnect()}}),{threshold:.24});iio.observe(impact)}}
+  const resetStat=(el)=>{el._countRun=(el._countRun||0)+1;el.textContent='0';el.classList.remove('is-spinning','is-settled')};
+  const settleStat=(el,instant=false)=>{const target=Number(el.dataset.count||0),suffix=el.dataset.suffix||'';el._countRun=(el._countRun||0)+1;const run=el._countRun;if(instant||reduce){el.textContent=format(target)+suffix;el.classList.add('is-settled');return}el.classList.remove('is-settled');el.classList.add('is-spinning');const start=performance.now(),dur=target>=1000?2200:1650;const tick=t=>{if(run!==el._countRun)return;const p=Math.min(1,(t-start)/dur),ease=1-Math.pow(1-p,4),v=target*ease;el.textContent=format(v)+suffix;if(p<1)requestAnimationFrame(tick);else{el.textContent=format(target)+suffix;el.classList.remove('is-spinning');el.classList.add('is-settled')}};requestAnimationFrame(tick)};
+  if(impact){
+    const counters=[...impact.querySelectorAll('[data-count]')];
+    if(reduce)counters.forEach(e=>settleStat(e,true));
+    else {
+      let armed=true,timers=[];
+      const clearTimers=()=>{timers.forEach(clearTimeout);timers=[]};
+      const play=()=>{if(!armed)return;armed=false;clearTimers();impact.classList.add('impact-played');counters.forEach(resetStat);counters.forEach((c,i)=>timers.push(setTimeout(()=>settleStat(c),i*260)))};
+      const reset=()=>{if(armed)return;armed=true;clearTimers();impact.classList.remove('impact-played');counters.forEach(resetStat)};
+      const iio=new IntersectionObserver(es=>es.forEach(e=>{if(e.intersectionRatio>=.34)play();else if(e.intersectionRatio<=.10)reset()}),{threshold:[0,.10,.34,.6]});
+      iio.observe(impact);
+    }
+  }
 
   // Homepage special announcement: only animate while visible; reduced-motion renders the final state immediately.
   const announcement=d.querySelector('.home-announcement');
