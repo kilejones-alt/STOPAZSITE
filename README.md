@@ -1,5 +1,5 @@
-# STOPAZSITE — final hard-rule refinement
+# STOPAZSITE — Professional Interaction Final
 
-Upload all files in this folder to the root of the new GitHub repository. The package is flat for GitHub browser upload and remains under 100 files.
+Upload every file in this folder to the root of the new GitHub repository. The package is flat for GitHub browser upload and remains under 100 files.
 
-This build preserves the approved visible wording and applies only the requested media, animation, responsive, and image refinements.
+This build preserves the approved hard-rule wording and adds the completed Giving Kitchen-style interaction system, responsive behavior, optimized motion, and final QA fixes.

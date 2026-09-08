@@ -158,6 +158,118 @@
   // Page transitions for same-site HTML navigation only; never delays external links, mailto, downloads or new tabs.
   if(!reduce)d.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(!a||e.defaultPrevented||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||a.target||a.hasAttribute('download'))return;let u;try{u=new URL(a.href,location.href)}catch{return}if(u.origin!==location.origin||!(u.pathname.endsWith('.html')||u.pathname.endsWith('/'))||u.href===location.href||(u.pathname===location.pathname&&u.hash))return;e.preventDefault();body.classList.add('is-page-leaving');setTimeout(()=>location.href=u.href,210)});
 
+
+  // ===== Giving Kitchen interaction completion pass =====
+  const gkDesktop=matchMedia('(min-width:821px) and (hover:hover) and (pointer:fine)');
+  const navGroups={
+    'about.html':[
+      ['About','about.html'],['Vision','vision-statement.html'],['Team','partners.html']
+    ],
+    'vision-statement.html':[
+      ['About','about.html'],['Vision','vision-statement.html'],['Team','partners.html']
+    ],
+    'partners.html':[
+      ['About','about.html'],['Vision','vision-statement.html'],['Team','partners.html']
+    ],
+    'educationtraining.html':[
+      ['Education','educationtraining.html'],['Certificates','certificate-program.html'],['LEARN','learn.html'],['LEAD','lead.html'],['ACT','act.html']
+    ],
+    'certificate-program.html':[
+      ['Education','educationtraining.html'],['Certificates','certificate-program.html'],['LEARN','learn.html'],['LEAD','lead.html'],['ACT','act.html']
+    ],
+    'global-declaration.html':[
+      ['Declaration','global-declaration.html'],['Sign Global Declaration','sign-global-declaration.html'],['Declaration Endorsements','declarationendorsements.html']
+    ],
+    'events.html':[
+      ['Events','events.html'],['World Symposium Against Antizionism','symposium.html']
+    ],
+    'volunteer.html':[
+      ['Get Involved','volunteer.html'],['Donate','donate-1.html'],['Marketplace','marketplace.html']
+    ]
+  };
+  const navMedia={
+    'about.html':'leadership-naya-960.webp',
+    'vision-statement.html':'leadership-natasha-960.webp',
+    'partners.html':'leadership-kile-960.webp',
+    'educationtraining.html':'antizionist-certification-fall-2026-840.webp',
+    'certificate-program.html':'antizionist-certification-fall-2026-840.webp',
+    'global-declaration.html':'https://images.squarespace-cdn.com/content/v1/691ddea6053ddb3437696ada/4ab255ff-96c1-4a3a-b02f-2a92a124c128/StopAZ_GlobalDeclarationBanner_2.png',
+    'events.html':'https://images.squarespace-cdn.com/content/v1/691ddea6053ddb3437696ada/efddb611-8678-4aec-b057-9c9ff7bd5bb2/TheatreSymposium%2B%281%29.png',
+    'volunteer.html':'https://images.squarespace-cdn.com/content/v1/691ddea6053ddb3437696ada/3a7cfeb5-28fc-4f41-a48e-6fb871b76591/Leadership%2B%281%29.png'
+  };
+
+  let mega=null,megaLinks=null,megaImg=null,megaOpenFor='',megaCloseTimer=0;
+  if(header&&menu){
+    mega=d.createElement('div'); mega.className='desktop-mega'; mega.setAttribute('aria-hidden','true');
+    const inner=d.createElement('div'); inner.className='desktop-mega-inner';
+    megaLinks=d.createElement('nav'); megaLinks.className='desktop-mega-links';
+    const media=d.createElement('div'); media.className='desktop-mega-media'; media.setAttribute('aria-hidden','true');
+    megaImg=d.createElement('img'); megaImg.alt=''; megaImg.decoding='async';megaImg.addEventListener('error',()=>{if(!megaImg.src.endsWith('stalin-hero-poster.jpg'))megaImg.src='stalin-hero-poster.jpg'}); media.appendChild(megaImg);
+    inner.append(megaLinks,media); mega.appendChild(inner); header.insertAdjacentElement('afterend',mega);
+    const closeMega=()=>{clearTimeout(megaCloseTimer);mega.classList.remove('is-open');mega.setAttribute('aria-hidden','true');body.classList.remove('mega-open');menu.querySelectorAll('a.mega-active').forEach(x=>{x.classList.remove('mega-active');x.setAttribute('aria-expanded','false')});megaOpenFor=''};
+    const scheduleClose=()=>{clearTimeout(megaCloseTimer);megaCloseTimer=setTimeout(closeMega,170)};
+    const keepOpen=()=>clearTimeout(megaCloseTimer);
+    const openMega=(a)=>{
+      if(!gkDesktop.matches)return;
+      menu.querySelectorAll('a.mega-active').forEach(x=>{if(x!==a){x.classList.remove('mega-active');x.setAttribute('aria-expanded','false')}});
+      const href=(a.getAttribute('href')||'').split('/').pop()||''; const group=navGroups[href]; if(!group)return closeMega();
+      keepOpen(); header.classList.remove('header-hidden');
+      de.style.setProperty('--mega-top',Math.max(0,header.getBoundingClientRect().bottom)+'px');
+      if(megaOpenFor!==href){
+        megaLinks.replaceChildren(...group.map(([label,url])=>{const x=d.createElement('a');x.className='desktop-mega-link';x.href=url;x.textContent=label;return x}));
+        megaImg.src=navMedia[href]||''; megaOpenFor=href;
+      }
+      a.classList.add('mega-active');a.setAttribute('aria-haspopup','true');a.setAttribute('aria-expanded','true');mega.classList.add('is-open');mega.setAttribute('aria-hidden','false');body.classList.add('mega-open');
+    };
+    menu.querySelectorAll('a').forEach(a=>{const href=(a.getAttribute('href')||'').split('/').pop()||'';if(navGroups[href]){a.setAttribute('aria-haspopup','true');a.setAttribute('aria-expanded','false')}a.addEventListener('pointerenter',()=>openMega(a));a.addEventListener('focus',()=>openMega(a))});
+    header.addEventListener('pointerenter',keepOpen);header.addEventListener('pointerleave',e=>{if(!mega.contains(e.relatedTarget))scheduleClose()});
+    mega.addEventListener('pointerenter',keepOpen);mega.addEventListener('pointerleave',e=>{if(!header.contains(e.relatedTarget))scheduleClose()});
+    mega.addEventListener('focusin',keepOpen);mega.addEventListener('focusout',e=>{if(!header.contains(e.relatedTarget)&&!mega.contains(e.relatedTarget))scheduleClose()});
+    d.addEventListener('keydown',e=>{if(e.key==='Escape')closeMega()});
+    addEventListener('resize',()=>{if(mega.classList.contains('is-open'))de.style.setProperty('--mega-top',Math.max(0,header.getBoundingClientRect().bottom)+'px')},{passive:true});
+  }
+
+  // Full-screen icon-only search. Results use only existing STOPAZ page names.
+  if(header){
+    const searchToggle=d.createElement('button'); searchToggle.type='button'; searchToggle.className='site-search-toggle'; searchToggle.setAttribute('aria-label','Search');
+    const search=d.createElement('div'); search.className='search-overlay'; search.setAttribute('aria-hidden','true');
+    const shell=d.createElement('div'); shell.className='search-shell';
+    const close=d.createElement('button'); close.type='button';close.className='search-close';close.textContent='×';close.setAttribute('aria-label','Close');
+    const field=d.createElement('input'); field.className='search-field';field.type='search';field.autocomplete='off';field.spellcheck=false;field.setAttribute('aria-label','Search');
+    const results=d.createElement('div'); results.className='search-results';
+    shell.append(field,results);search.append(close,shell);body.appendChild(search);
+    header.insertBefore(searchToggle,toggle||menu);
+    const sitePages=[
+      ['STOP AZ','index.html'],['About','about.html'],['Vision Statement','vision-statement.html'],['Team/Partners','partners.html'],['Education & Training','educationtraining.html'],['StopAZ Certificate Program','certificate-program.html'],['Global Declaration','global-declaration.html'],['Sign Global Declaration','sign-global-declaration.html'],['Declaration Endorsements','declarationendorsements.html'],['Support & Partner','volunteer.html'],['Marketplace','marketplace.html'],['LEARN','learn.html'],['LEAD','lead.html'],['ACT','act.html'],['World Symposium Against Antizionism','symposium.html'],['Events','events.html'],['Donate','donate-1.html']
+    ];
+    const renderSearch=()=>{const q=field.value.trim().toLowerCase();results.replaceChildren();if(!q)return;sitePages.filter(([label])=>label.toLowerCase().includes(q)).slice(0,10).forEach(([label,url])=>{const a=d.createElement('a');a.className='search-result';a.href=url;a.textContent=label;results.appendChild(a)})};
+    const closeSearch=()=>{search.classList.remove('is-open');search.setAttribute('aria-hidden','true');body.classList.remove('search-open');field.value='';results.replaceChildren();searchToggle.focus({preventScroll:true})};
+    const openSearch=()=>{if(mega&&mega.classList.contains('is-open')){mega.classList.remove('is-open');mega.setAttribute('aria-hidden','true');body.classList.remove('mega-open')}search.classList.add('is-open');search.setAttribute('aria-hidden','false');body.classList.add('search-open');setTimeout(()=>field.focus(),60)};
+    searchToggle.addEventListener('click',openSearch);close.addEventListener('click',closeSearch);field.addEventListener('input',renderSearch);search.addEventListener('click',e=>{if(e.target===search)closeSearch()});search.addEventListener('keydown',e=>{if(e.key!=='Tab')return;const fs=[close,field,...results.querySelectorAll('a')].filter(x=>!x.disabled);if(!fs.length)return;const first=fs[0],last=fs[fs.length-1];if(e.shiftKey&&d.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&d.activeElement===last){e.preventDefault();first.focus()}});d.addEventListener('keydown',e=>{if(e.key==='Escape'&&search.classList.contains('is-open'))closeSearch()});
+  }
+
+  // Persistent existing CTA + icon-only back-to-top.
+  if(page!=='volunteer'){
+    const float=d.createElement('a');float.className='floating-get-involved';float.href='volunteer.html';float.textContent='Get Involved';body.appendChild(float);
+    let floatRaf=0;const updateFloat=()=>{floatRaf=0;float.classList.toggle('is-visible',!body.classList.contains('mega-open')&&!body.classList.contains('search-open'))};const queueFloat=()=>{if(!floatRaf)floatRaf=requestAnimationFrame(updateFloat)};addEventListener('scroll',queueFloat,{passive:true});addEventListener('resize',queueFloat,{passive:true});new MutationObserver(queueFloat).observe(body,{attributes:true,attributeFilter:['class']});updateFloat();
+  }
+  const topButton=d.createElement('button');topButton.type='button';topButton.className='back-to-top';topButton.setAttribute('aria-label','Back to top');body.appendChild(topButton);
+  let topRaf=0;const updateTop=()=>{topRaf=0;topButton.classList.toggle('is-visible',scrollY>900)};const queueTop=()=>{if(!topRaf)topRaf=requestAnimationFrame(updateTop)};addEventListener('scroll',queueTop,{passive:true});addEventListener('resize',queueTop,{passive:true});updateTop();topButton.addEventListener('click',()=>scrollTo({top:0,behavior:reduce?'auto':'smooth'}));
+
+  // Rich carousel controls and pointer drag. Arrow-only controls add no visible wording.
+  const carouselTracks=[];
+  if(page==='home'){
+    const s5=d.querySelector('main>section:nth-of-type(5) .card-grid'),s7=d.querySelector('main>section:nth-of-type(7) ul'),s9=d.querySelector('main>section:nth-of-type(9) .card-grid');
+    [s5,s7,s9].filter(Boolean).forEach(t=>carouselTracks.push(t));
+  }
+  carouselTracks.forEach(track=>{
+    track.classList.add('gk-carousel-track'); const host=track.parentElement;host.classList.add('gk-carousel-host');
+    const controls=d.createElement('div');controls.className='carousel-controls';
+    const make=(dir)=>{const b=d.createElement('button');b.type='button';b.setAttribute('aria-label',dir<0?'Previous':'Next');const s=d.createElement('span');s.setAttribute('aria-hidden','true');s.textContent=dir<0?'←':'→';b.appendChild(s);b.addEventListener('click',()=>{const first=track.firstElementChild,step=(first?first.getBoundingClientRect().width:track.clientWidth*.75)+22;track.scrollBy({left:dir*step,behavior:reduce?'auto':'smooth'})});return b};
+    controls.append(make(-1),make(1));host.appendChild(controls);
+    if(fine){let dragging=false,startX=0,startLeft=0;track.addEventListener('pointerdown',e=>{if(e.button!==0)return;dragging=true;startX=e.clientX;startLeft=track.scrollLeft;track.classList.add('is-dragging');track.setPointerCapture?.(e.pointerId)});track.addEventListener('pointermove',e=>{if(!dragging)return;track.scrollLeft=startLeft-(e.clientX-startX)});const end=e=>{if(!dragging)return;dragging=false;track.classList.remove('is-dragging');try{track.releasePointerCapture?.(e.pointerId)}catch{}};track.addEventListener('pointerup',end);track.addEventListener('pointercancel',end)}
+  });
+
   const footer=d.querySelector('.footer'); if(footer){footer.classList.add('motion-footer');if(!reduce&&'IntersectionObserver'in window){const fio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){footer.classList.add('is-footer-visible');fio.disconnect()}}),{threshold:.04});fio.observe(footer)}else footer.classList.add('is-footer-visible')}
 
   const form=d.getElementById('inquiry-form');if(form)form.addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(form),subject=fd.get('subject')||'STOPAZ inquiry',msg=`Name: ${fd.get('name')||''}\nOrganization: ${fd.get('organization')||''}\nEmail: ${fd.get('email')||''}\n\n${fd.get('message')||''}`;location.href=`mailto:info@stopaz.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`});
