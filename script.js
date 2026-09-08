@@ -96,22 +96,33 @@
 
   d.querySelectorAll('main img').forEach(img=>{img.classList.add('image-loading');const done=()=>{img.classList.remove('image-loading');img.classList.add('image-ready')};if(img.complete&&img.naturalWidth)done();else img.addEventListener('load',done,{once:true});img.addEventListener('error',()=>{img.classList.remove('image-loading');img.classList.add('image-error')},{once:true})});
 
-  const video=d.querySelector('.hero-stalin-video,.site-bg-video video');
+  const video=d.querySelector('.hero-stalin-video');
   if(video){
-    const mobileVideo=matchMedia('(max-width:700px)').matches;
-    const wanted=mobileVideo?'stalin-hero-loop-mobile.mp4':'stalin-hero-loop.mp4';
-    if(video.classList.contains('hero-stalin-video') && !video.getAttribute('src')?.endsWith(wanted)){video.src=wanted;video.load()}
+    const panel=video.closest('.hero-stalin-panel');
+    const mobile=matchMedia('(max-width:700px)').matches;
+    const wanted=mobile?video.dataset.mobileSrc:video.dataset.desktopSrc;
+    if(wanted && video.getAttribute('src')!==wanted){video.src=wanted;video.load()}
     video.muted=true; video.defaultMuted=true; video.loop=true; video.autoplay=true; video.playsInline=true;
-    let playFallback=null;
-    const removeFallback=()=>{if(playFallback){playFallback.remove();playFallback=null}};
-    const showFallback=()=>{if(playFallback||!video.closest('.hero-stalin-panel'))return;playFallback=d.createElement('button');playFallback.type='button';playFallback.className='hero-video-fallback';playFallback.textContent='';playFallback.setAttribute('aria-label','Play homepage historical motion');playFallback.addEventListener('click',()=>{video.muted=true;video.play().then(removeFallback).catch(()=>{})});video.closest('.hero-stalin-panel').appendChild(playFallback)};
-    const tryPlay=()=>{if(!d.hidden)video.play().then(removeFallback).catch(()=>{})};
-    tryPlay(); requestAnimationFrame(tryPlay); setTimeout(tryPlay,180); setTimeout(tryPlay,700); setTimeout(()=>{if(video.paused||video.readyState<2)showFallback()},1400);
-    video.addEventListener('playing',removeFallback,{passive:true});
-    video.addEventListener('loadeddata',tryPlay,{passive:true});
-    video.addEventListener('canplay',tryPlay,{passive:true});
+    let lastTime=-1, lastProgressAt=performance.now();
+    const showFallback=()=>panel?.classList.remove('hero-video-playing');
+    const revealVideo=()=>{
+      const now=performance.now();
+      if(video.currentTime>lastTime+.03){lastTime=video.currentTime;lastProgressAt=now}
+      if(video.currentTime>.12 && !video.paused && video.readyState>=2)panel?.classList.add('hero-video-playing');
+    };
+    const tryPlay=()=>{if(!d.hidden){const p=video.play();if(p&&p.catch)p.catch(showFallback)}};
+    ['timeupdate','playing','loadeddata','canplay'].forEach(ev=>video.addEventListener(ev,()=>{revealVideo();if(ev==='canplay')tryPlay()},{passive:true}));
+    ['error','stalled','abort','emptied'].forEach(ev=>video.addEventListener(ev,showFallback,{passive:true}));
     addEventListener('pageshow',tryPlay,{passive:true});
     d.addEventListener('visibilitychange',()=>{if(d.hidden)video.pause();else tryPlay()});
+    const watchdog=setInterval(()=>{
+      if(d.hidden)return;
+      revealVideo();
+      if(panel?.classList.contains('hero-video-playing') && performance.now()-lastProgressAt>2200)showFallback();
+      if(video.paused || video.readyState<2)tryPlay();
+    },900);
+    addEventListener('pagehide',()=>clearInterval(watchdog),{once:true});
+    tryPlay(); setTimeout(tryPlay,180); setTimeout(tryPlay,700);
   }
 
   // Giving Kitchen-style impact: replay whenever the section leaves view and is entered again.
