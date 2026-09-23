@@ -82,3 +82,8 @@
 .home-hero--navy-tangerine .hero-copy h1,.home-hero--navy-tangerine .hero-copy .hero-sub,.home-hero--navy-tangerine .hero-bottom-message{font-family:Bahnschrift,"Arial Narrow",Arial,sans-serif}
 
 .home-end-strip{height:6px;background:var(--tangerine)}
+
+/* Each review version uses one typeface across its complete homepage. */
+.page-home--navy,.page-home--navy *{font-family:Georgia,"Times New Roman",serif!important}
+.page-home--white,.page-home--white *{font-family:"Trebuchet MS",Arial,sans-serif!important}
+.page-home--navy-tangerine,.page-home--navy-tangerine *{font-family:Bahnschrift,"Arial Narrow",Arial,sans-serif!important}
