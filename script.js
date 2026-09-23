@@ -204,9 +204,9 @@
     'partners.html':'leadership-kile-960.webp',
     'educationtraining.html':'antizionist-certification-fall-2026-840.webp',
     'certificate-program.html':'antizionist-certification-fall-2026-840.webp',
-    'global-declaration.html':'https://images.squarespace-cdn.com/content/v1/691ddea6053ddb3437696ada/4ab255ff-96c1-4a3a-b02f-2a92a124c128/StopAZ_GlobalDeclarationBanner_2.png',
-    'events.html':'https://images.squarespace-cdn.com/content/v1/691ddea6053ddb3437696ada/efddb611-8678-4aec-b057-9c9ff7bd5bb2/TheatreSymposium%2B%281%29.png',
-    'volunteer.html':'https://images.squarespace-cdn.com/content/v1/691ddea6053ddb3437696ada/3a7cfeb5-28fc-4f41-a48e-6fb871b76591/Leadership%2B%281%29.png'
+    'global-declaration.html':'assets/vendor/squarespace/888f7f8e20ddd49e3ea2.png',
+    'events.html':'assets/vendor/squarespace/d200b93da5adcc66796b.png',
+    'volunteer.html':'assets/vendor/squarespace/4335b2fb6440124aca3e.png'
   };
 
   let mega=null,megaLinks=null,megaImg=null,megaOpenFor='',megaCloseTimer=0;
