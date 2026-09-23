@@ -142,3 +142,20 @@
   .page-home .home-pathways .pathway p{font-size:13px;overflow-wrap:anywhere}
   .page-home .home-pathways .pathway strong{font-size:10px;overflow-wrap:anywhere}
 }
+
+/* Homepage surfaces and rules use solid approved colors only. */
+.page-home .top.sitewide-nav-v2{border-bottom-color:var(--navy)}
+.page-home .nav2-toggle{border-color:var(--navy)}
+.page-home .mega-v2{box-shadow:none}
+.page-home .mega-v2-links a{border-top-color:var(--navy)}
+.page-home .home-second .impact-secondary article+article{border-color:currentColor}
+@media(max-width:900px){.page-home .sitewide-menu-v2>a{border-bottom-color:var(--navy)}}
+
+/* Narrow screens: three equal pathways fill the viewport instead of a small inset block. */
+@media(max-width:520px){
+  .page-home .home-pathways{width:100vw;min-height:calc(100svh - var(--header-h));margin-right:calc(50% - 50vw);margin-left:calc(50% - 50vw);margin-bottom:0}
+  .page-home .home-pathways .pathway{min-height:calc(100svh - var(--header-h));padding:14px}
+  .page-home .home-pathways .pathway h2{font-size:clamp(25px,7.1vw,30px)}
+  .page-home .home-pathways .pathway p{font-size:12px;line-height:1.34}
+  .page-home .home-pathways .pathway strong{font-size:10px;line-height:1.25}
+}
