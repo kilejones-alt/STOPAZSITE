@@ -1,0 +1,15 @@
+STOPAZ REBUILD — APPLY TO EXISTING REPOSITORY
+
+This ZIP is an overlay for kilejones-alt/STOPAZSITE, not a blank replacement repository.
+
+After copying the ZIP contents into the repository root, run one command:
+
+    python3 tools/apply_all.py
+
+That command will:
+1. apply the spreadsheet navigation to retained legacy pages;
+2. download existing Squarespace-hosted images into the GitHub repository and rewrite runtime references locally;
+3. remove Vercel config, the zero-byte download file, and all four approved hero MP4s;
+4. run core and full-repository QA.
+
+The primary rebuilt pages use clean rebuild.css/rebuild.js and do not load the old 126 KB styles.css or old script.js. Retained legacy pages keep their page-specific styling/behavior while receiving the new navigation.
