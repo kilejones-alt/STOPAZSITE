@@ -1,6 +1,7 @@
 /* Approved example-three theme, shared by rebuilt and retained pages. */
 :root,body.live-colors[data-page]{--navy:#18233A;--navy2:#18233A;--ink:#18233A;--tangerine:#F15A24;--coral:#F15A24;--coral-dark:#F15A24;--yellow:#F15A24;--white:#FFFFFF;--powder:#FFFFFF;--powder2:#FFFFFF;--line:#18233A;--live-navy:#18233A;--live-blue:#18233A;--live-black:#18233A;--live-red:#F15A24;--live-white:#FFFFFF;--live-pale:#FFFFFF;--sans:Bahnschrift,"Arial Narrow",Arial,sans-serif;--serif:var(--sans);--cond:var(--sans);--block:var(--sans)}
-body,body *{font-family:Bahnschrift,"Arial Narrow",Arial,sans-serif!important}
+/* Layered important rule also wins over retained page-specific font shorthands. */
+@layer approved-typography{body,body *{font-family:Bahnschrift,"Arial Narrow",Arial,sans-serif!important}}
 body{background:var(--white);color:var(--navy)}
 body *,body *::before,body *::after{box-shadow:none!important;text-shadow:none!important}
 .top.sitewide-nav-v2{background:var(--white)!important;border-bottom-color:var(--navy)!important}
