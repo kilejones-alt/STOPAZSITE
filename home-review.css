@@ -1,0 +1,49 @@
+/* Final layout for the three homepage reviews; shared site styles stay intact. */
+.page-home{--home-gutter:max(20px, min(5vw, 72px), calc((100vw - 1360px)/2))}
+.page-home--white,.page-home--white *{font-family:"Franklin Gothic Medium","Arial Narrow",Arial,sans-serif!important}
+.page-home .top.sitewide-nav-v2{padding-inline:var(--home-gutter)}
+.page-home .home-hero{min-height:calc(100svh - var(--header-h));justify-content:center}
+.page-home .home-hero .hero-copy{width:100%;max-width:none;padding:64px var(--home-gutter) 150px;container-type:inline-size}
+.page-home .home-hero .hero-copy h1{max-width:none;font-size:min(148px,13cqw);font-weight:700;font-stretch:normal;font-variation-settings:normal;line-height:1.04;letter-spacing:-.045em;white-space:normal;text-wrap:wrap}
+.page-home .home-hero .hero-copy h1 span{display:block;white-space:nowrap}
+.page-home--navy .home-hero .hero-copy h1{font-size:min(132px,12cqw)}
+.page-home .home-hero .hero-sub{margin-top:28px;font-size:clamp(18px,2vw,28px);font-weight:500;line-height:1.4;max-width:100%}
+.page-home .home-hero .hero-bottom-message{left:var(--home-gutter);right:var(--home-gutter);bottom:40px;margin:0;line-height:1.4}
+.page-home .home-second{min-height:0;padding-inline:var(--home-gutter)}
+.page-home .home-second .impact-band{padding:48px 0 40px}
+.page-home .home-second .impact-inner{width:100%;padding:0}
+.page-home .home-second .impact-kicker{margin-bottom:20px}
+.page-home .home-second .impact-primary{gap:8px;padding-bottom:24px}
+.page-home .home-second .impact-number{font-size:clamp(76px,10vw,144px);line-height:1.1;letter-spacing:-.055em;padding-bottom:0}
+.page-home .home-second .impact-primary p{font-size:clamp(15px,1.45vw,21px);line-height:1.3}
+.page-home .home-second .impact-secondary{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none}
+.page-home .home-second .impact-secondary article{padding:24px 24px 0 0}
+.page-home .home-second .impact-secondary article+article{margin-top:0;padding-left:32px;border-top:0;border-left:1px solid currentColor}
+.page-home .home-second .impact-secondary strong{font-size:clamp(42px,5.5vw,76px);line-height:1.1;letter-spacing:-.04em}
+.page-home .home-second .impact-secondary span{margin-top:12px;font-size:13px;line-height:1.4}
+.page-home .home-pathways{width:100%;min-height:0;grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 24px}
+.page-home .home-pathways .pathway{min-height:150px;grid-template-rows:auto 1fr auto;gap:12px;padding:12px clamp(12px,2.8vw,40px)}
+.page-home .home-pathways .pathway:first-child{padding-left:0}
+.page-home .home-pathways .pathway:last-child{padding-right:0}
+.page-home .home-pathways .pathway+.pathway{border-top:0;border-left:1px solid currentColor}
+.page-home .home-pathways .pathway h2{font-size:clamp(26px,3.2vw,46px);line-height:1.08;letter-spacing:-.045em}
+.page-home .home-pathways .pathway p{align-self:start;margin:0;font-size:clamp(14px,1.2vw,17px);font-weight:500;line-height:1.4;overflow-wrap:normal}
+.page-home .home-pathways .pathway strong{font-size:clamp(12px,1vw,14px);line-height:1.4;letter-spacing:.025em;white-space:normal;overflow-wrap:normal}
+.page-home .home-pathways .pathway:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+@media(max-width:520px){
+  .page-home .home-hero .hero-copy{padding-top:40px;padding-bottom:140px}
+  .page-home .home-hero .hero-sub{font-size:18px;max-width:280px}
+  .page-home .home-hero .hero-bottom-message{bottom:32px;font-size:13px}
+  .page-home .home-second .impact-band{padding:36px 0}
+  .page-home .home-second .impact-secondary article{padding-right:12px}
+  .page-home .home-second .impact-secondary article+article{padding-left:16px}
+  .page-home .home-second .impact-secondary strong{font-size:38px}
+  .page-home .home-second .impact-secondary span{font-size:12px;letter-spacing:.02em}
+  .page-home .home-pathways{width:calc(100% + 2 * var(--home-gutter));margin-inline:calc(-1 * var(--home-gutter));margin-bottom:24px}
+  .page-home .home-pathways .pathway{min-height:0;padding:12px;gap:12px}
+  .page-home .home-pathways .pathway:first-child{padding-left:12px}
+  .page-home .home-pathways .pathway:last-child{padding-right:12px}
+  .page-home .home-pathways .pathway h2{font-size:clamp(23px,6.8vw,30px)}
+  .page-home .home-pathways .pathway p{font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+  .page-home .home-pathways .pathway strong{font-size:12px;overflow-wrap:anywhere}
+}

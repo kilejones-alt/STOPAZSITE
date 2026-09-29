@@ -1,0 +1,37 @@
+STOPAZ REBUILD QA — 2026-09-20
+
+CONTENT
+- Rechecked the NAVIGATION, LEARN, LEAD, ACT, ABOUT, and GET INVOLVED spreadsheet tabs.
+- Removed the unapproved visible STOPAZ eyebrow from all internal page heroes.
+- Removed AI-written aria-label strings; navigation uses semantic elements / aria-labelledby only.
+- Restored exact spreadsheet copy including the source spelling, punctuation, duplicated passage, and typos; no silent rewriting.
+- Added the previously omitted RESEARCH & RESOURCES spreadsheet note exactly as supplied.
+- Did not display spreadsheet instruction notes such as “Then three large visual pathways,” “USE NAYA'S IMAGE OF THREE ERAS,” or the ACT reservation note.
+- Homepage counter / announcement / footer wording is retained from the existing GitHub site, not newly invented copy.
+
+DESIGN / PERFORMANCE
+- Main rebuilt pages load rebuild.css + rebuild.js rather than the old 126 KB stylesheet / 27 KB script.
+- Approved palette scan: only #191F33, #D8392B, and #FFF in the new CSS.
+- Videos are not used by rebuilt pages; cleanup tool removes all four approved MP4 files.
+- Existing Stalin poster, certification artwork, leadership portraits, and the Drive “Three Eras” image are reused; no AI-generated site imagery was added.
+- Counter replay, reveal motion, header behavior, mega navigation, mobile navigation, ticker, progress indicator, and reduced-motion handling are retained/rebuilt.
+- No icons or SVG controls are added. Legacy icon-only controls created by the old script are hidden after sitewide navigation patching.
+
+SECURITY / DEPENDENCIES
+- Rebuilt pages use local CSS/JS/images only; no Squarespace or Vercel runtime dependency.
+- Strict meta CSP on rebuilt pages: self-hosted styles/scripts/images/fonts; no frames, workers, media, or network connects.
+- No eval, new Function, innerHTML, fetch, or localStorage in rebuild.js/site-nav.js.
+- Full-repo localizer is included to copy existing Squarespace assets into GitHub and rewrite all legacy references.
+- Sitewide navigation patch is included so retained legacy pages receive the spreadsheet primary navigation without replacing their page content.
+
+QA EXECUTED IN THIS SESSION
+- Core HTML structural/static QA: PASS (0 errors / 0 warnings).
+- JavaScript syntax checks: PASS.
+- Python utility syntax checks: PASS.
+- Local-link target check against overlay + current GitHub file set: PASS (0 missing targets).
+- New CSS color audit: PASS.
+- No SVG/icon markup in rebuilt pages: PASS.
+
+LIMITATION
+- The current normal-chat GitHub connector still returns HTTP 403 for writes, so the live repository has not been modified.
+- Pixel-level browser screenshot QA could not be executed inside this sandbox because Chromium navigation is blocked by the environment administrator. Final pixel QA should be run from the deployed/preview branch after Codex applies this overlay.

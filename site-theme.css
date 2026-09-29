@@ -1,0 +1,33 @@
+/* Approved example-three theme, shared by rebuilt and retained pages. */
+:root,body.live-colors[data-page]{--navy:#18233A;--navy2:#18233A;--ink:#18233A;--tangerine:#F15A24;--coral:#F15A24;--coral-dark:#F15A24;--yellow:#F15A24;--white:#FFFFFF;--powder:#FFFFFF;--powder2:#FFFFFF;--line:#18233A;--live-navy:#18233A;--live-blue:#18233A;--live-black:#18233A;--live-red:#F15A24;--live-white:#FFFFFF;--live-pale:#FFFFFF;--sans:Bahnschrift,"Arial Narrow",Arial,sans-serif;--serif:var(--sans);--cond:var(--sans);--block:var(--sans)}
+/* Layered important rule also wins over retained page-specific font shorthands. */
+@layer approved-typography{body,body *{font-family:Bahnschrift,"Arial Narrow",Arial,sans-serif!important}}
+body{background:var(--white);color:var(--navy)}
+body *,body *::before,body *::after{box-shadow:none!important;text-shadow:none!important}
+.top.sitewide-nav-v2{background:var(--white)!important;border-bottom-color:var(--navy)!important}
+.top.sitewide-nav-v2 .brand,.sitewide-menu-v2>a,.nav2-toggle{color:var(--navy)!important}
+.top.sitewide-nav-v2 .brand span{color:var(--tangerine)!important}
+.nav2-toggle,.mega-v2-links a{border-color:var(--navy)!important}
+.mega-v2{background:var(--white);color:var(--navy)}
+body:not(.page-home) .page-hero,body.live-colors[data-page] main>.page-hero{background-color:var(--navy)!important;color:var(--white)!important}
+body:not(.page-home) .page-hero h1,body.live-colors[data-page] main>.page-hero h1{color:var(--tangerine)!important;line-height:1.05;font-size:clamp(42px,6.5vw,96px);overflow-wrap:anywhere}
+body:not(.page-home) .page-hero :is(p,.eyebrow),body.live-colors[data-page] main>.page-hero :is(p,.eyebrow){color:var(--white)!important}
+body:not(.page-home) :is(h2,h3){line-height:1.1;overflow-wrap:anywhere}
+.footer,body.live-colors[data-page] .footer{background:var(--navy)!important;color:var(--white)!important;border-top-color:var(--tangerine)!important}
+.footer :is(p,a,.footer-bottom),body.live-colors[data-page] .footer :is(p,a,.footer-bottom){color:var(--white)!important;border-color:var(--white)!important}
+.footer h2,.footer .brand span,.footer::before,body.live-colors[data-page] .footer :is(h2,.brand span),body.live-colors[data-page] .footer::before{color:var(--tangerine)!important}
+.footer a:hover,body.live-colors[data-page] .footer a:hover{color:var(--tangerine)!important}
+.button,.text-link{background:var(--tangerine);border-color:var(--tangerine);color:var(--white);line-height:1.3;white-space:normal}
+.button.ghost{background:transparent;color:inherit;border-color:currentColor}
+.button:hover,.text-link:hover{background:var(--navy);border-color:var(--tangerine);color:var(--white)}
+input::placeholder,textarea::placeholder{color:inherit;opacity:1}
+@media(max-width:900px){.sitewide-menu-v2{background:var(--white)!important}.sitewide-menu-v2>a{border-bottom-color:var(--navy)!important}}
+
+/* Retained page-specific themes must not override the selected hero/header. */
+html:root body.motion-shell .top.sitewide-nav-v2{height:var(--header-h)!important;min-height:0!important;padding:0 clamp(20px,4vw,72px)!important;background:var(--white)!important}
+html:root body.motion-shell .top.sitewide-nav-v2 .brand{font-size:28px!important;line-height:1!important;color:var(--navy)!important}
+html:root body.motion-shell .top.sitewide-nav-v2 .brand span{color:var(--tangerine)!important}
+html:root body.motion-shell .page-hero,html:root body.motion-shell.live-colors[data-page] main>.page-hero{background-color:var(--navy)!important;color:var(--white)!important}
+html:root body.motion-shell .page-hero h1,html:root body.motion-shell.live-colors[data-page] main>.page-hero h1{color:var(--tangerine)!important;line-height:1.05!important}
+html:root body.motion-shell .page-hero :is(p,.eyebrow),html:root body.motion-shell.live-colors[data-page] main>.page-hero :is(p,.eyebrow){color:var(--white)!important}
+html:root body.motion-shell .page-hero.has-media::before{background:linear-gradient(90deg,rgba(24,35,58,.85),rgba(24,35,58,.55))!important}
